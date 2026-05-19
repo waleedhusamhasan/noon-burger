@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOON Burger — Scarborough's Finest Halal Smash Burgers</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #e8c96d;
+    --gold-glow: rgba(201,168,76,0.35);
+    --black: #080808;
+    --dark: #0f0f0f;
+    --dark2: #161616;
+    --dark3: #1e1e1e;
+    --white: #f5f0e8;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+    backdrop-filter: blur(4px);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 20px var(--gold-glow), 0 0 60px rgba(201,168,76,0.15);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 8px 18px;
+    font-weight: 700;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 24px 80px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 60%, rgba(201,168,76,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 40% at 50% 100%, rgba(201,168,76,0.06) 0%, transparent 60%);
+  }
+
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(201,168,76,0.03) 80px, rgba(201,168,76,0.03) 81px);
+  }
+
+  .hero-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(6rem, 18vw, 16rem);
+    line-height: 0.88;
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--gold);
+    text-shadow:
+      0 0 30px var(--gold-glow),
+      0 0 80px rgba(201,168,76,0.2),
+      0 0 150px rgba(201,168,76,0.1);
+    -webkit-text-stroke: 1px rgba(201,168,76,0.5);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-top: 28px;
+    max-width: 480px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    background: var(--gold);
+    padding: 16px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    box-shadow: 0 0 30px rgba(201,168,76,0.3);
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold-light);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-outline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 16px 36px;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover {
+    background: rgba(201,168,76,0.08);
+    border-color: var(--gold);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* ── HALAL BADGE STRIP ── */
+  .strip {
+    background: var(--gold);
+    padding: 14px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .strip-inner {
+    display: flex;
+    gap: 64px;
+    white-space: nowrap;
+    animation: marquee 20s linear infinite;
+  }
+  .strip-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    color: var(--black);
+    flex-shrink: 0;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 120px 48px; }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 48px;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-visual {
+    position: relative;
+    aspect-ratio: 4/5;
+  }
+
+  .about-box {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.12);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    color: rgba(201,168,76,0.08);
+    letter-spacing: 0.1em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 70%, rgba(201,168,76,0.08), transparent 60%);
+  }
+
+  .about-box-accent {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 160px;
+    height: 160px;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-box-accent-inner {
+    text-align: center;
+  }
+
+  .about-box-accent-inner span:first-child {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--black);
+    display: block;
+    line-height: 1;
+  }
+
+  .about-box-accent-inner span:last-child {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.7);
+  }
+
+  .about-content p {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #aaa;
+    margin-bottom: 24px;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── MENU ── */
+  #menu {
+    background: var(--dark);
+    max-width: 100%;
+  }
+
+  .menu-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .menu-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .menu-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab:hover, .tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2px;
+  }
+
+  .menu-item {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+    display: none;
+  }
+
+  .menu-item.visible { display: block; }
+
+  .menu-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(201,168,76,0.08), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .menu-item:hover { border-color: rgba(201,168,76,0.3); }
+  .menu-item:hover::before { opacity: 1; }
+
+  .menu-item-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .menu-item-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .menu-item-desc {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: #777;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .menu-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .menu-item-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  .menu-item-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+  }
+
+  .menu-item-badge.bestseller {
+    background: var(--gold);
+    color: var(--black);
+    font-weight: 700;
+    border-color: var(--gold);
+  }
+
+  /* ── FEATURED ITEM ── */
+  .menu-featured {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, var(--dark3), var(--dark2));
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-featured::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.1), transparent 60%);
+  }
+
+  .featured-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .featured-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .featured-desc {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: #888;
+    line-height: 1.7;
+    max-width: 500px;
+  }
+
+  .featured-price-block {
+    text-align: right;
+    position: relative;
+    z-index: 1;
+  }
+
+  .featured-from {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .featured-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: var(--gold);
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(201,168,76,0.4);
+  }
+
+  /* ── HOURS / LOCATION ── */
+  #info {
+    background: var(--black);
+  }
+
+  .info-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .info-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .info-card:hover::after { transform: scaleX(1); }
+
+  .info-icon {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--gold);
+  }
+
+  .info-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .info-card p {
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: #777;
+    line-height: 1.8;
+  }
+
+  .info-card strong {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding: 60px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 20px var(--gold-glow);
+    text-decoration: none;
+  }
+
+  .footer-text {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.05em;
+    text-align: right;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 20px;
+  }
+
+  .footer-social a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.4; transform: scaleY(0.6); }
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    #about { grid-template-columns: 1fr; gap: 48px; }
+    .about-visual { aspect-ratio: 3/2; }
+    .info-inner { grid-template-columns: 1fr; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .menu-featured { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-text { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">NOON</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#info">Find Us</a></li>
+  </ul>
+  <a href="#menu" class="nav-badge">Order Now</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-tag">Scarborough's Halal Smash Burger</div>
+  <h1 class="hero-title">
+    NOON<br>
+    <span>BURGER</span>
+  </h1>
+  <p class="hero-sub">
+    Hand-smashed halal beef. Brioche buns baked in-house. 
+    Real flavour, no compromise.
+  </p>
+  <div class="hero-cta">
+    <a href="#menu" class="btn-primary"><span>See The Menu</span></a>
+    <a href="#info" class="btn-outline">Find Us</a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-text">✦ 100% HALAL CERTIFIED</span>
+    <span class="strip-text">✦ SMASHED FRESH TO ORDER</span>
+    <span class="strip-text">✦ IN-HOUSE BRIOCHE BUNS</span>
+    <span class="strip-text">✦ SCARBOROUGH'S FINEST</span>
+    <span class="strip-text">✦ SLIDER BOXES</span>
+    <span class="strip-text">✦ 100% HALAL CERTIFIED</span>
+    <span class="strip-text">✦ SMASHED FRESH TO ORDER</span>
+    <span class="strip-text">✦ IN-HOUSE BRIOCHE BUNS</span>
+    <span class="strip-text">✦ SCARBOROUGH'S FINEST</span>
+    <span class="strip-text">✦ SLIDER BOXES</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section>
+  <div id="about">
+    <div class="about-visual">
+      <div class="about-box">
+        NOON
+        <div class="about-box-accent">
+          <div class="about-box-accent-inner">
+            <span>100%</span>
+            <span>Halal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="section-label">Our Story</div>
+      <h2 class="section-title">Built For<br>The Community</h2>
+      <p>
+        NOON Burger was born from a simple obsession: make the best halal smash burger the GTA has ever tasted. 
+        No shortcuts. No compromises. Just pure flavour.
+      </p>
+      <p>
+        Every bun is baked in-house using the Tangzhong method — the Japanese technique that gives you that cloud-soft 
+        texture with a golden brioche crust. Every patty is smashed to order on a blazing flat griddle, 
+        locking in a crust you'll hear across the restaurant.
+      </p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">9+</div>
+          <div class="stat-label">Years in the Industry</div>
+        </div>
+        <div>
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Halal — Always</div>
+        </div>
+        <div>
+          <div class="stat-num">0</div>
+          <div class="stat-label">Frozen Patties. Ever.</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Cheese Pull Potential</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-inner">
+    <div class="menu-header">
+      <div>
+        <div class="section-label">What We Serve</div>
+        <h2 class="section-title">The Menu</h2>
+      </div>
+      <div class="menu-tabs">
+        <button class="tab active" onclick="filterMenu('all')">All</button>
+        <button class="tab" onclick="filterMenu('burgers')">Burgers</button>
+        <button class="tab" onclick="filterMenu('boxes')">Slider Boxes</button>
+        <button class="tab" onclick="filterMenu('chicken')">Chicken</button>
+        <button class="tab" onclick="filterMenu('sides')">Sides</button>
+        <button class="tab" onclick="filterMenu('drinks')">Drinks</button>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+
+      <!-- FEATURED -->
+      <div class="menu-featured menu-item visible" data-cat="burgers">
+        <div style="position:relative;z-index:1;">
+          <div class="featured-label">✦ Signature — Our Most Ordered</div>
+          <div class="featured-name">THE NOON<br>SMASH BURGER</div>
+          <div class="featured-desc">
+            Double smash beef patty · American cheese · caramelized onions · 
+            NOON sauce · shredded lettuce · pickles · brioche bun baked in-house.
+            The one that started it all.
+          </div>
+        </div>
+        <div class="featured-price-block">
+          <div class="featured-from">Starting from</div>
+          <div class="featured-price">$13.99</div>
+        </div>
+      </div>
+
+      <!-- SLIDER BOXES -->
+      <div class="menu-item visible" data-cat="boxes">
+        <div class="menu-item-tag">✦ Slider Box</div>
+        <div class="menu-item-name">BEEF SLIDER<br>BOX × 6</div>
+        <div class="menu-item-desc">Six halal beef smash sliders, NOON sauce, American cheese, pickles. Made to share. Or not.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$24.99</div>
+          <span class="menu-item-badge bestseller">Bestseller</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="boxes">
+        <div class="menu-item-tag">✦ Slider Box</div>
+        <div class="menu-item-name">CHICKEN SLIDER<br>BOX × 6</div>
+        <div class="menu-item-desc">Six halal crispy chicken sliders, spicy mayo, slaw, pickled jalapeños. Crunch in every bite.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$24.99</div>
+          <span class="menu-item-badge">Popular</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="boxes">
+        <div class="menu-item-tag">✦ Slider Box</div>
+        <div class="menu-item-name">MIX SLIDER<br>BOX × 6</div>
+        <div class="menu-item-desc">3 beef + 3 chicken sliders. Can't pick one? Now you don't have to. Best of both worlds.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$24.99</div>
+          <span class="menu-item-badge">Fan Fav</span>
+        </div>
+      </div>
+
+      <!-- BURGERS -->
+      <div class="menu-item visible" data-cat="burgers">
+        <div class="menu-item-tag">✦ Single Smash</div>
+        <div class="menu-item-name">THE CLASSIC<br>NOON</div>
+        <div class="menu-item-desc">Single smash patty, American cheese, NOON sauce, pickles, onions, brioche bun. Clean. Perfect.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$9.99</div>
+          <span class="menu-item-badge">Classic</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="burgers">
+        <div class="menu-item-tag">✦ Double Smash</div>
+        <div class="menu-item-name">THE NOON<br>DOUBLE</div>
+        <div class="menu-item-desc">Two smash patties, double cheese, lettuce, tomato, NOON sauce, caramelized onions. Go big.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$13.99</div>
+          <span class="menu-item-badge bestseller">Bestseller</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="burgers">
+        <div class="menu-item-tag">✦ Loaded</div>
+        <div class="menu-item-name">THE GOLD<br>RUSH</div>
+        <div class="menu-item-desc">Double smash, aged cheddar, crispy beef bacon, fried egg, truffle mayo, brioche bun. The full experience.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$16.99</div>
+          <span class="menu-item-badge">Premium</span>
+        </div>
+      </div>
+
+      <!-- CHICKEN -->
+      <div class="menu-item visible" data-cat="chicken">
+        <div class="menu-item-tag">✦ Crispy Box</div>
+        <div class="menu-item-name">NOON CRISPY<br>BOX</div>
+        <div class="menu-item-desc">5 halal chicken tenders, house seasoning, golden fried. Choose your dip: NOON sauce, ranch, or hot honey.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$13.99</div>
+          <span class="menu-item-badge bestseller">Bestseller</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="chicken">
+        <div class="menu-item-tag">✦ Chicken Burger</div>
+        <div class="menu-item-name">CRISPY CHICKEN<br>NOON</div>
+        <div class="menu-item-desc">Juicy crispy chicken thigh, slaw, spicy NOON mayo, brioche bun. Crunchy outside, tender inside.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$12.99</div>
+          <span class="menu-item-badge">Popular</span>
+        </div>
+      </div>
+
+      <!-- SIDES -->
+      <div class="menu-item visible" data-cat="sides">
+        <div class="menu-item-tag">✦ Side</div>
+        <div class="menu-item-name">NOON<br>FRIES</div>
+        <div class="menu-item-desc">Skin-on fries, NOON seasoning blend. Simple, crispy, addictive. The kind you finish before the burger.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$4.99</div>
+          <span class="menu-item-badge">Classic</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="sides">
+        <div class="menu-item-tag">✦ Side</div>
+        <div class="menu-item-name">POUTINE</div>
+        <div class="menu-item-desc">NOON fries, cheese curds, rich beef gravy. The Canadian classic done right. Non-negotiable.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$8.99</div>
+          <span class="menu-item-badge">🍁 Canadian</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="sides">
+        <div class="menu-item-tag">✦ Side</div>
+        <div class="menu-item-name">NOON<br>COLESLAW</div>
+        <div class="menu-item-desc">Creamy house coleslaw with a hint of jalapeño. Light, crunchy, the perfect contrast.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$3.99</div>
+          <span class="menu-item-badge">Fresh</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="sides">
+        <div class="menu-item-tag">✦ Side</div>
+        <div class="menu-item-name">NOON<br>SOUP</div>
+        <div class="menu-item-desc">Chef's daily soup — warming, rich, and made fresh. Check the board for today's offering.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$5.99</div>
+          <span class="menu-item-badge">Daily Fresh</span>
+        </div>
+      </div>
+
+      <!-- DRINKS -->
+      <div class="menu-item visible" data-cat="drinks">
+        <div class="menu-item-tag">✦ Drinks</div>
+        <div class="menu-item-name">CANNED<br>DRINKS</div>
+        <div class="menu-item-desc">Pepsi, 7UP, Orange Crush, Dr Pepper, water. Keep it cold, keep it simple.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$2.49</div>
+          <span class="menu-item-badge">Cold</span>
+        </div>
+      </div>
+
+      <div class="menu-item visible" data-cat="drinks">
+        <div class="menu-item-tag">✦ Drinks</div>
+        <div class="menu-item-name">LEMONADE<br>NOON</div>
+        <div class="menu-item-desc">Fresh-squeezed lemonade with a hint of rose. House-made daily. Pairs with everything.</div>
+        <div class="menu-item-footer">
+          <div class="menu-item-price">$4.99</div>
+          <span class="menu-item-badge">House-Made</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INFO -->
+<section id="info">
+  <div style="max-width:1200px;margin:0 auto 60px;">
+    <div class="section-label">Come See Us</div>
+    <h2 class="section-title">Hours &amp; Location</h2>
+  </div>
+  <div class="info-inner">
+    <div class="info-card">
+      <div class="info-icon">📍</div>
+      <div class="info-card-title">Location</div>
+      <p>
+        <strong>Wexford Plaza</strong><br>
+        Lawrence Ave E, Scarborough<br>
+        Toronto, ON<br><br>
+        Free parking available.<br>
+        TTC accessible.
+      </p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🕐</div>
+      <div class="info-card-title">Hours</div>
+      <p>
+        <strong>Mon – Thu</strong><br>
+        11:00 AM – 11:00 PM<br><br>
+        <strong>Fri – Sat</strong><br>
+        11:00 AM – 2:00 AM<br><br>
+        <strong>Sunday</strong><br>
+        12:00 PM – 10:00 PM
+      </p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">📱</div>
+      <div class="info-card-title">Stay Connected</div>
+      <p>
+        Follow us for ASMR food drops, limited specials, and giveaway announcements.<br><br>
+        <strong>@NOONBurger</strong> on Instagram &amp; TikTok<br><br>
+        DM for catering &amp; events.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#hero" class="footer-logo">NOON BURGER</a>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">TikTok</a>
+    <a href="#">Order Online</a>
+  </div>
+  <div class="footer-text">
+    © 2025 NOON Burger. All rights reserved.<br>
+    100% Halal · Scarborough, Toronto
+  </div>
+</footer>
+
+<script>
+  function filterMenu(cat) {
+    // Update tabs
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    // Show/hide items
+    document.querySelectorAll('.menu-item').forEach(item => {
+      const itemCat = item.dataset.cat;
+      if (cat === 'all' || itemCat === cat) {
+        item.classList.add('visible');
+      } else {
+        item.classList.remove('visible');
+      }
+    });
+  }
+
+  // Subtle scroll animation for info cards
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.info-card, .menu-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
